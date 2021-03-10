@@ -29,21 +29,23 @@ def LipaNaMpesaOnline(request):
     api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     headers = {"Authorization":"Bearer %s" % access_token}
     request = {
-        "BusinessShortCode":LipaNaMpesaPassword.business_short_code,
-        "Password":LipaNaMpesaPassword.decode_password,
-        "Timestamp":LipaNaMpesaPassword.lipa_time,
-        "TransactionType":"CustomerPayBillOnline",
-        "Amount":1,
-        "PartyA":254712860997,
-        "PartyB":LipaNaMpesaPassword.business_short_code,
-        "PhoneNumber":254712860997,
-        "CallBackUrl":"https://sandbox.safaricom.co.ke/mpesa/",
-        "AccountReference":"Gift",
-        "TransactionDesc":"Testing stk push"
-    }
-    response = requests.post(api_url, json=request, headers=headers)
+        "BusinessShortCode": LipaNaMpesaPassword.business_short_code,
+        "Password": LipaNaMpesaPassword.decode_password,
+        "Timestamp": LipaNaMpesaPassword.lipa_time,
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": f"{amount}",
+        "PartyA": f"{telephone}",
+        "PartyB": "174379",
+        "PhoneNumber": f"{telephone}",
+        "CallBackURL": "https://myhealthke.pythonanywhere.com/saf",
+        "AccountReference": "MyHealth",
+        "TransactionDesc": "myhealth test"
+            }
+            response = requests.post(api_url, json=request, headers=headers)
+    print(response)
     return HttpResponse('success')
 
+#register confirmation and validation url with safaricom
 @csrf_exempt
 def register_urls(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
@@ -57,6 +59,7 @@ def register_urls(request):
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 
+#capture the mpesa calls
 @csrf_exempt
 def call_back(request):
     pass
