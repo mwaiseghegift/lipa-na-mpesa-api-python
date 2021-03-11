@@ -13,8 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def getAccessToken(request):
-    consumer_key = 'n9KbDodntGKwIpwrENmqwghaXk18WstU'
-    consumer_secret = 'TGxmOUSsa4FK4cuD'
+    consumer_key = 'bs84aD7VaJLrZosruylv9dAGi1dYnuJy'
+    consumer_secret = 'UcgJr2x3xwlHg3GK'
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     
     r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
@@ -33,15 +33,15 @@ def LipaNaMpesaOnline(request):
         "Password": LipaNaMpesaPassword.decode_password,
         "Timestamp": LipaNaMpesaPassword.lipa_time,
         "TransactionType": "CustomerPayBillOnline",
-        "Amount": f"{amount}",
-        "PartyA": f"{telephone}",
+        "Amount": "5",
+        "PartyA": "254769956770",
         "PartyB": "174379",
-        "PhoneNumber": f"{telephone}",
+        "PhoneNumber": "254769956770",
         "CallBackURL": "https://myhealthke.pythonanywhere.com/saf",
-        "AccountReference": "MyHealth",
+        "AccountReference": "GiftWasHere",
         "TransactionDesc": "myhealth test"
             }
-            response = requests.post(api_url, json=request, headers=headers)
+    response = requests.post(api_url, json=request, headers=headers)
     print(response)
     return HttpResponse('success')
 
@@ -53,8 +53,8 @@ def register_urls(request):
     headers = {"Authorization":"Bearer %s" % access_token}
     options = {"ShortCode": LipaNaMpesaPassword.business_short_code,
                "ResponseType":"Completed",
-               "ConfirmationUrl":"http://127.0.0.1:8000/c2b/confirmation",
-               "ValidationUrl": "http://127.0.0.1:8000/c2b/validation",
+               "ConfirmationUrl":"https://5590a37a7745.ngrok.io/c2b/confirmation",
+               "ValidationUrl": "https://5590a37a7745.ngrok.io/c2b/validation",
                }
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
