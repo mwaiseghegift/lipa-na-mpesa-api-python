@@ -30,34 +30,36 @@ def LipaNaMpesaOnline(request):
     headers = {"Authorization":"Bearer %s" % access_token}
     request = {
         "BusinessShortCode": LipaNaMpesaPassword.business_short_code,
-        "Password": LipaNaMpesaPassword.decode_password,
-        "Timestamp": LipaNaMpesaPassword.lipa_time,
-        "TransactionType": "CustomerPayBillOnline",
-        "Amount": "5",
-        "PartyA": "254769956770",
-        "PartyB": "174379",
-        "PhoneNumber": "254769956770",
-        "CallBackURL": "https://myhealthke.pythonanywhere.com/saf",
-        "AccountReference": "GiftWasHere",
-        "TransactionDesc": "myhealth test"
+        "Password":LipaNaMpesaPassword.decode_password,
+        "Timestamp":LipaNaMpesaPassword.lipa_time,
+        "TransactionType":"CustomerPayBillOnline",
+        "Amount":"5",
+        "PartyA":"254712860997",
+        "PartyB":"174379",
+        "PhoneNumber":"254712860997",
+        "CallBackURL":"https://myhealthke.pythonanywhere.com/saf",
+        "AccountReference":"GiftWasHere",
+        "TransactionDesc":"myhealth test"
             }
     response = requests.post(api_url, json=request, headers=headers)
     print(response)
     return HttpResponse('success')
 
 #register confirmation and validation url with safaricom
+
 @csrf_exempt
 def register_urls(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
     api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
-    headers = {"Authorization":"Bearer %s" % access_token}
-    options = {"ShortCode": LipaNaMpesaPassword.business_short_code,
-               "ResponseType":"Completed",
-               "ConfirmationUrl":"https://5590a37a7745.ngrok.io/c2b/confirmation",
-               "ValidationUrl": "https://5590a37a7745.ngrok.io/c2b/validation",
-               }
+    headers = {"Authorization": "Bearer %s" % access_token}
+    options = {"ShortCode": LipaNaMpesaPassword.test_c2b_shortcode,
+               "ResponseType": "Completed",
+               "ConfirmationURL": "https://d48654a52581.ngrok.io/c2b/confirmation/",
+               "ValidationURL": "https://d48654a52581.ngrok.io/c2b/validation/"}
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
+
+#simulate transaction
 
 #capture the mpesa calls
 @csrf_exempt
@@ -78,15 +80,15 @@ def confirmation(request):
     mpesa_payment = json.loads(mpesa_body)
     
     payment = MpesaPayment (
-        first_name = mpesa_payment['FirstName'],
-        last_name = mpesa_payment['LastName'],
-        middle_name = mpesa_payment['MiddleName'],
-        description = mpesa_payment['TransID'],
-        phone_number = mpesa_payment['MSISDN'],
-        amount = mpesa_payment['TransAmount'],
-        reference = mpesa_payment['BillRefNumber'],
-        organization_balance = mpesa_payment['OrgAccountBalance'],
-        type = mpesa_payment['TransactionType']
+        first_name=mpesa_payment['FirstName'],
+        last_name=mpesa_payment['LastName'],
+        middle_name=mpesa_payment['MiddleName'],
+        description=mpesa_payment['TransID'],
+        phone_number=mpesa_payment['MSISDN'],
+        amount=mpesa_payment['TransAmount'],
+        reference=mpesa_payment['BillRefNumber'],
+        organization_balance=mpesa_payment['OrgAccountBalance'],
+        type=mpesa_payment['TransactionType']
     )
     payment.save()
     context = {
