@@ -42,7 +42,7 @@ def LipaNaMpesaOnline(request):
         "PartyA":"254712860997",
         "PartyB":"174379",
         "PhoneNumber":"254712860997",
-        "CallBackURL":"https://myhealthke.pythonanywhere.com/saf",
+        "CallBackURL":"https/retechstore.pythonanywhere.com/c2b/confirmation/",
         "AccountReference":"GiftWasHere",
         "TransactionDesc":"myhealth test"
             }
@@ -59,8 +59,8 @@ def register_urls(request):
     headers = {"Authorization": "Bearer %s" % access_token}
     options = {"ShortCode": LipaNaMpesaPassword.test_c2b_shortcode,
                "ResponseType": "Completed",
-               "ConfirmationURL": "https://3776411096cb.ngrok.io/c2b/confirmation/",
-               "ValidationURL": "https://3776411096cb.ngrok.io/c2b/validation/"}
+               "ConfirmationURL": "https://1ce8ea8f6c35.ngrok.io/c2b/confirmation/",
+               "ValidationURL": "https://1ce8ea8f6c35.ngrok.io/c2b/validation/"}
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 
@@ -70,13 +70,13 @@ def simulate_transaction(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
     api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate"
     headers = {"Authorization": "Bearer %s" % access_token}
-    request = { "ShortCode":"600383",
+    request = { "ShortCode":LipaNaMpesaPassword.test_c2b_shortcode,
                 "CommandID":"CustomerPayBillOnline",
-                "Amount":"5",
-                "Msisdn":"254708374349",
-                "BillRefNumber":LipaNaMpesaPassword.business_short_code }
+                "Amount":"500",
+                "Msisdn":"254708374149",
+                "BillRefNumber":LipaNaMpesaPassword.business_short_code}
   
-    response = requests.post(api_url, json = request, headers=headers)
+    response = requests.post(api_url, json=request, headers=headers)
     return HttpResponse(response.text)
 
 
@@ -87,7 +87,6 @@ def call_back(request):
 
 @csrf_exempt
 def validation(request):
-    
     data = json.loads(request.body)
     file = open('validate.json','a')
     file.write(json.dumps(data))
@@ -100,27 +99,22 @@ def validation(request):
     return JsonResponse(dict(context))
 
 @csrf_exempt
-def confirmation(request):
-    data = json.loads(request.body)
-    file = open('validate.json','a')
-    file.write(json.dumps(data))
-    file.close()
+def confirmation(request):   
+    mpesa_body = request.body.decode('utf-8')
+    mpesa_payment = json.loads(mpesa_body)
     
-    # mpesa_body = request.body.decode('utf-8')
-    # mpesa_payment = json.loads(mpesa_body)
-    
-    # payment = MpesaPayment (
-    #     first_name=mpesa_payment['FirstName'],
-    #     last_name=mpesa_payment['LastName'],
-    #     middle_name=mpesa_payment['MiddleName'],
-    #     description=mpesa_payment['TransID'],
-    #     phone_number=mpesa_payment['MSISDN'],
-    #     amount=mpesa_payment['TransAmount'],
-    #     reference=mpesa_payment['BillRefNumber'],
-    #     organization_balance=mpesa_payment['OrgAccountBalance'],
-    #     type=mpesa_payment['TransactionType']
-    # )
-    # payment.save()
+    payment = MpesaPayment (
+        first_name=mpesa_payment['FirstName'],
+        last_name=mpesa_payment['LastName'],
+        middle_name=mpesa_payment['MiddleName'],
+        description=mpesa_payment['TransID'],
+        phone_number=mpesa_payment['MSISDN'],
+        amount=mpesa_payment['TransAmount'],
+        reference=mpesa_payment['BillRefNumber'],
+        organization_balance=mpesa_payment['OrgAccountBalance'],
+        type=mpesa_payment['TransactionType']
+    )
+    payment.save()
     context = {
         "ResultCode":0,
         "ResultDesc":"Accepted"

@@ -48,11 +48,10 @@ def LipaNaMpesaOnline(request):
         "TransactionDesc":"myhealth test"
             }
     response = requests.post(api_url, json=request, headers=headers)
-    print(response)
     return HttpResponse('success')
 
 #register confirmation and validation url with safaricom
-@api_view(['POST'])
+@api_view(['GET'])
 @csrf_exempt
 def register_urls(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
@@ -66,6 +65,7 @@ def register_urls(request):
     return HttpResponse(response.text)
 
 #simulate transaction
+@api_view(['POST'])
 @csrf_exempt
 def simulate_transaction(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
@@ -73,8 +73,8 @@ def simulate_transaction(request):
     headers = {"Authorization": "Bearer %s" % access_token}
     request = { "ShortCode":"600383",
                 "CommandID":"CustomerPayBillOnline",
-                "Amount":"5",
-                "Msisdn":"254708374349",
+                "Amount":"50",
+                "Msisdn":"254708374149",
                 "BillRefNumber":LipaNaMpesaPassword.business_short_code }
   
     response = requests.post(api_url, json = request, headers=headers)
