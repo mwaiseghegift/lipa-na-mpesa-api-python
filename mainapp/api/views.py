@@ -1,13 +1,14 @@
+from rest_framework.decorators import api_view
 from django.shortcuts import render
 from django.utils import timezone
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from .models import MpesaPayment
+from mainapp.models import MpesaPayment
 
 import requests
 from requests.auth import HTTPBasicAuth
 import json
-from .mpesa_credentials import MpesaAccessToken, LipaNaMpesaPassword
+from mainapp.mpesa_credentials import MpesaAccessToken, LipaNaMpesaPassword
 from django.views.decorators.csrf import csrf_exempt
 
 from pathlib import Path
@@ -28,7 +29,7 @@ def getAccessToken(request):
     
     return HttpResponse(validated_mpesa_access_token)
 
-
+@api_view(['POST'])
 def LipaNaMpesaOnline(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
     api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -51,7 +52,7 @@ def LipaNaMpesaOnline(request):
     return HttpResponse('success')
 
 #register confirmation and validation url with safaricom
-
+@api_view(['POST'])
 @csrf_exempt
 def register_urls(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token

@@ -26,7 +26,7 @@ SECRET_KEY = '-^8=)%31_#h*fz_han91qc038o-0g9gk*uk&8pezyersb+_@&3'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-                'd48654a52581.ngrok.io',
+                '3776411096cb.ngrok.io',
                 '127.0.0.1:8000',
                  ]
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     
     'mainapp',
 ]

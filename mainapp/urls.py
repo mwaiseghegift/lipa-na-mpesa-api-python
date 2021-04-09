@@ -6,6 +6,7 @@ from .views import (
     call_back,
     validation,
     confirmation,
+    simulate_transaction,
 )
 
 app_name = 'main'
@@ -16,5 +17,6 @@ urlpatterns = [
     path('c2b/register/', register_urls, name = "register"),
     path('c2b/callback/', call_back, name='callback'),
     path('c2b/validation/', validation, name="validation"),
-    path('c2b/confirmation/', confirmation, name="confirmation"), 
+    path('c2b/confirmation/', confirmation, name="confirmation"),
+    path('c2b/simulate/', simulate_transaction, name='simulate') 
 ]
