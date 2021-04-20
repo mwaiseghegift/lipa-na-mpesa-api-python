@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 import json
 from requests.auth import HTTPBasicAuth
@@ -8,7 +8,7 @@ app = Flask(__name__)
 #daraja credentials
 consumer_key = 'nRdG36C2MATXGsP5gmdyGfaSQJRUDZQd'
 consumer_secret = 'UmyMLFHXJnVxjLPT'
-base_url = "https://d70f7cf9f4d7.ngrok.io"
+base_url = 'https://b0a82b93f246.ngrok.io'
 
 
 @app.route('/')
@@ -25,16 +25,16 @@ def register_urls():
     mpesa_endpoint = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
     headers = {"Authorization":"Bearer %s" % create_access_token()}
     req_body = {
-        "ShortCode": "600383",
+        "ShortCode": "603021",
         "ResponseType": "Completed",
-        "ConfirmationURL": "https://ab2d643bdf46.ngrok.io/c2b/confirm",
-        "ValidationURL": "https://ab2d643bdf46.ngrok.io/c2b/validate"}
+        "ConfirmationURL": "https://b0a82b93f246.ngrok.io/c2b/confirm",
+        "ValidationURL": "https://b0a82b93f246.ngrok.io/c2b/validate"}
     response_data = requests.post(mpesa_endpoint,json=req_body, headers=headers)
     return response_data.json()
 
-@app.route('/c2b/confirm')
+@app.route('/c2b/confirm', methods=['POST'])
 def confimation_url():
-    data = requests.get_json()
+    data = request.get_json()
     file = open('confirm.json','a')
     file.write(json.dumps(data))
     file.close()
@@ -44,9 +44,9 @@ def confimation_url():
         "ResultDesc":"Accepted"
     }
     
-@app.route('/c2b/validate')
+@app.route('/c2b/validate', methods=['POST'])
 def validate():
-    data = requests.get_json()
+    data = request.get_json()
     file = open('validate.json','a')
     file.write(json.dumps(data))
     file.close
@@ -63,13 +63,13 @@ def simulate_trans():
     access_token = create_access_token()
     headers = {"Authorization":"Bearer %s" % access_token}
     req_body = {
-        "ShortCode":"600383",
+        "ShortCode":"603021",
         "CommandID":"CustomerPayBillOnline",
         "Amount":"500",
         "Msisdn":"254708374149",
         "BillRefNumber":"TestPay1" }
-    response = requests.post(mpesa_endpoint, json = req_body, headers=headers)
-    return response.json()
+    simulate_response = requests.post(mpesa_endpoint, json = req_body, headers=headers)
+    return simulate_response.json()
 
 #access token view
 @app.route('/get_access_token')
