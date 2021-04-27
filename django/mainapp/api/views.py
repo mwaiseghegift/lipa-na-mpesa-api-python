@@ -16,12 +16,14 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 
+from decouple import config
+
 
 # Create your views here.
 
 def getAccessToken(request):
-    consumer_key = 'bs84aD7VaJLrZosruylv9dAGi1dYnuJy'
-    consumer_secret = 'UcgJr2x3xwlHg3GK'
+    consumer_key = config('consumer_key')
+    consumer_secret = config('consumer_secret')
     api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
     
     r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
