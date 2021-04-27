@@ -5,9 +5,11 @@ from requests.auth import HTTPBasicAuth
 
 app = Flask(__name__)
 
+from decouple import config
+
 #daraja credentials
-consumer_key = 'nRdG36C2MATXGsP5gmdyGfaSQJRUDZQd'
-consumer_secret = 'UmyMLFHXJnVxjLPT'
+consumer_key = config('consumer_key')
+consumer_secret = config('consumer_secret')
 base_url = 'https://b0a82b93f246.ngrok.io'
 
 
