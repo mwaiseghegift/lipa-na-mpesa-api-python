@@ -39,11 +39,11 @@ def LipaNaMpesaOnline(request):
         "Password":LipaNaMpesaPassword.decode_password,
         "Timestamp":LipaNaMpesaPassword.lipa_time,
         "TransactionType":"CustomerPayBillOnline",
-        "Amount":"5",
+        "Amount":"1",
         "PartyA":"254712860997",
         "PartyB":"174379",
         "PhoneNumber":"254712860997",
-        "CallBackURL":"https/retechstore.pythonanywhere.com/c2b/confirmation/",
+        "CallBackURL":"https://5ce0-102-0-1-6.in.ngrok.io/c2b/confirmation/",
         "AccountReference":"GiftWasHere",
         "TransactionDesc":"myhealth test"
             }
@@ -56,12 +56,12 @@ def LipaNaMpesaOnline(request):
 @csrf_exempt
 def register_urls(request):
     access_token = MpesaAccessToken.validated_mpesa_access_token
-    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
+    api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v2/registerurl"
     headers = {"Authorization": "Bearer %s" % access_token}
     options = {"ShortCode": LipaNaMpesaPassword.test_c2b_shortcode,
                "ResponseType": "Completed",
-               "ConfirmationURL": "https://93c0351429ab.ngrok.io/c2b/confirmation/",
-               "ValidationURL": "https://93c0351429ab.ngrok.io/c2b/validation/"}
+               "ConfirmationURL": "https://5ce0-102-0-1-6.in.ngrok.io/c2b/confirmation/",
+               "ValidationURL": "https://5ce0-102-0-1-6.in.ngrok.io/c2b/validation/"}
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 
