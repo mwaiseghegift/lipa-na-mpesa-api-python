@@ -16,6 +16,8 @@ import os
 
 from decouple import config
 
+test_url = 'https://a2d0-102-0-1-6.in.ngrok.io'
+
 # Create your views here.
 
 def getAccessToken(request):
@@ -43,7 +45,7 @@ def LipaNaMpesaOnline(request):
         "PartyA":"254712860997",
         "PartyB":"174379",
         "PhoneNumber":"254712860997",
-        "CallBackURL":"https://5ce0-102-0-1-6.in.ngrok.io/c2b/confirmation/",
+        "CallBackURL":f"{test_url}/c2b/confirmation/",
         "AccountReference":"GiftWasHere",
         "TransactionDesc":"myhealth test"
             }
@@ -60,8 +62,8 @@ def register_urls(request):
     headers = {"Authorization": "Bearer %s" % access_token}
     options = {"ShortCode": LipaNaMpesaPassword.test_c2b_shortcode,
                "ResponseType": "Completed",
-               "ConfirmationURL": "https://5ce0-102-0-1-6.in.ngrok.io/c2b/confirmation/",
-               "ValidationURL": "https://5ce0-102-0-1-6.in.ngrok.io/c2b/validation/"}
+               "ConfirmationURL": f"{test_url}/c2b/confirmation/",
+               "ValidationURL": f"{test_url}/c2b/validation/"}
     response = requests.post(api_url, json=options, headers=headers)
     return HttpResponse(response.text)
 
