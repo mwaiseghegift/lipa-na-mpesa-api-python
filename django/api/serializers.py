@@ -2,7 +2,7 @@ from .validators import validate_possible_number
 from rest_framework import serializers
 
 from . import models
-from .exceptions import ValidationError
+from django.core.exceptions import ValidationError
 
 
 class MpesaCheckoutSerializer(serializers.ModelSerializer):

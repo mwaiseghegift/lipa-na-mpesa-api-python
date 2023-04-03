@@ -1,7 +1,7 @@
 from django.urls import path
 from mainapp.api.views import *
 
-app_name = 'api'
+app_name = 'api_main'
 
 urlpatterns = [
     path('access/token/', getAccessToken, name="api_get_mpesa_access_token"),
