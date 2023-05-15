@@ -1,0 +1,32 @@
+
+consumer_key=<consumer_key>
+consumer_secret=<consumer_secret>
+pass_key=<pass_key>
+
+
+MPESA_ENVIRONMENT = 'production'
+
+MPESA_CONSUMER_KEY=<consumer_key>
+MPESA_CONSUMER_SECRET =<consumer_secret>
+
+#Shortcode to use for transactions. For sandbox  use the Shortcode 1 provided on test credentials page
+
+MPESA_SHORTCODE =<shortcode>
+
+MPESA_SHORTCODE_TYPE = 'paybill' # or 'shortcode'
+
+
+MPESA_PASSKEY =<pass_key>
+
+
+access_token_url=<access_token_url>
+checkout_url=<checkout_url>
+
+SAF_ACCESS_TOKEN_API=<access_token_url>
+SAF_STK_PUSH_API=<checkout_url>
+SAF_STK_PUSH_QUERY_API=<checkout_url>
+
+c2b_callback=<c2b_callback>
+register_url=<register_url>
+confirmation_url=<confirmation_url>
+validation_url=<validation_url>
