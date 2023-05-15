@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'payments.apps.PaymentsConfig',
-    'django_daraja'
+    'django_daraja',
+    'class_based',
 ]
 
 MIDDLEWARE = [
