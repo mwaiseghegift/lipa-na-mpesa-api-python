@@ -16,7 +16,7 @@ from decouple import config
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
-
+from django.utils.datastructures import MultiValueDict
 
 class MpesaHandler:
     now = None
@@ -165,35 +165,59 @@ def query_payment_status(request):
 # callback url
 @csrf_exempt
 def c2b_callback(request):
-    print(request.body)
-    # write response to file
-    with open("c2b_response.json", "w") as f:
-        json.dump(request.body, f)
+    if request.method == "POST":
+        data = request.body
 
-    return JsonResponse({"message": "success", "data": request.body})
-
+        try:
+            # deserialize data
+            data = json.loads(data)
+            # write response to file
+            with open("c2b_response.json", "a") as f:
+                f.write(json.dumps(data))  # write the serialized JSON string directly
+            # return data as jsonresponse
+            return JsonResponse({"message": "success", "data": data})
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({"message": "error", "data": str(e)})
+    else:
+        return JsonResponse({"message": "method not allowed"})
 
 # validation url
 @csrf_exempt
 def validation_url(request):
-    data = request.body
-    print(data)
-    # write response to file
-    with open("validation_response.json", "w") as f:
-        json.dump(data, f)
-    # return data as jsonresponse
-    return JsonResponse({"message": "success", "data": data})
+    if request.method == "POST":
+        data = request.body
 
+        try:
+            # deserialize data
+            data = json.loads(data)
+            # write response to file
+            with open("validation_response.json", "a") as f:
+                f.write(json.dumps(data))  # write the serialized JSON string directly
+            # return data as jsonresponse
+            return JsonResponse({"message": "success", "data": data})
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({"message": "error", "data": str(e)})
+    else:
+        return JsonResponse({"message": "method not allowed"})
 
 # confirmation url
 @csrf_exempt
 def confirmation_url(request):
-    data = request.body
-    print(data)
-    # write response to file
-    with open("confirmation_response.json", "w") as f:
-        json.dump(data, f)
-    # return data as jsonresponse
-    return JsonResponse({"message": "success", "data": data})
+    if request.method == "POST":
+        data = request.body
 
-
+        try:
+            # deserialize data
+            data = json.loads(data)
+            # write response to file
+            with open("confirmation_response.json", "a") as f:
+                f.write(json.dumps(data))  # write the serialized JSON string directly
+            # return data as jsonresponse
+            return JsonResponse({"message": "success", "data": data})
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({"message": "error", "data": str(e)})
+    else:
+        return JsonResponse({"message": "method not allowed"})
