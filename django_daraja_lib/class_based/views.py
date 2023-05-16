@@ -16,7 +16,7 @@ from decouple import config
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.datastructures import MultiValueDict
+from .mpesa_credentials import MpesaAccessToken, LipaNaMpesaPassword
 
 class MpesaHandler:
     now = None
@@ -167,7 +167,6 @@ def query_payment_status(request):
 def c2b_callback(request):
     if request.method == "POST":
         data = request.body
-
         try:
             # deserialize data
             data = json.loads(data)
@@ -182,42 +181,46 @@ def c2b_callback(request):
     else:
         return JsonResponse({"message": "method not allowed"})
 
+@csrf_exempt
+def register_c2b_urls(request):
+    mpesa = MpesaHandler()
+    access_token = MpesaAccessToken.validated_mpesa_access_token
+    api_url = "https://api.safaricom.co.ke/mpesa/c2b/v2/registerurl"
+    headers = {"Authorization": "Bearer %s" % access_token}
+    options = {"ShortCode": mpesa.shortcode,
+               "ResponseType": "Completed",
+               "ConfirmationURL": config("confirmation_url"),
+               "ValidationURL": config("validation_url")}
+    response = requests.post(api_url, json=options, headers=headers)
+    return JsonResponse({"message": "success", "data": response.text})
+
 # validation url
 @csrf_exempt
 def validation_url(request):
-    if request.method == "POST":
-        data = request.body
-
-        try:
-            # deserialize data
-            data = json.loads(data)
-            # write response to file
-            with open("validation_response.json", "a") as f:
-                f.write(json.dumps(data))  # write the serialized JSON string directly
-            # return data as jsonresponse
-            return JsonResponse({"message": "success", "data": data})
-        except Exception as e:
-            print(str(e))
-            return JsonResponse({"message": "error", "data": str(e)})
-    else:
-        return JsonResponse({"message": "method not allowed"})
+    data = request.body
+    try:
+        # deserialize data
+        data = json.loads(data)
+        # write response to file
+        with open("c2b_validation.json", "a") as f:
+            f.write(json.dumps(data))  # write the serialized JSON string directly
+        # return data as jsonresponse
+        context = {"ResultCode": 0, "ResultDesc": "Accepted"}
+        return JsonResponse(dict(context))
+    except Exception as e:
+        print(str(e))
+        return JsonResponse({"message": "error", "data": str(e)})
 
 # confirmation url
 @csrf_exempt
 def confirmation_url(request):
-    if request.method == "POST":
-        data = request.body
+    mpesa_body = request.body.decode("utf-8")
+    mpesa_payment = json.loads(mpesa_body)
+    print(mpesa_payment)
 
-        try:
-            # deserialize data
-            data = json.loads(data)
-            # write response to file
-            with open("confirmation_response.json", "a") as f:
-                f.write(json.dumps(data))  # write the serialized JSON string directly
-            # return data as jsonresponse
-            return JsonResponse({"message": "success", "data": data})
-        except Exception as e:
-            print(str(e))
-            return JsonResponse({"message": "error", "data": str(e)})
-    else:
-        return JsonResponse({"message": "method not allowed"})
+    with open("c2b_confirmation.json", "a") as f:
+        f.write(json.dumps(mpesa_payment))
+
+    context = {"ResultCode": 0, "ResultDesc": "Accepted"}
+
+    return JsonResponse(dict(dict(context)))
