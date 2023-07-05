@@ -6,4 +6,4 @@
 
 * django-daraja lib
 
-Contact [link](mwaiseghegift4@gmail.com) for help
+Contact via email ```bash mwaiseghegift4@gmail.com``` for help
