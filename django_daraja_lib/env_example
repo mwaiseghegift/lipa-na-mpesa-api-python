@@ -19,12 +19,12 @@ MPESA_SHORTCODE_TYPE = 'paybill' # or 'shortcode'
 MPESA_PASSKEY =<pass_key>
 
 
-access_token_url=https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials
-checkout_url=https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest
+access_token_url=<access_token_url>
+checkout_url=<checkout_url>
 
-SAF_ACCESS_TOKEN_API=https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials
-SAF_STK_PUSH_API=https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest
-SAF_STK_PUSH_QUERY_API=https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query
+SAF_ACCESS_TOKEN_API=<access_token_url>
+SAF_STK_PUSH_API=<checkout_url>
+SAF_STK_PUSH_QUERY_API=<checkout_url>
 
 c2b_callback=<c2b_callback>
 register_url=<register_url>
